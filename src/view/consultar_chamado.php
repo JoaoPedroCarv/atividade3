@@ -1,36 +1,48 @@
 <?php
-require_once "../../validador_acesso.php";
-require_once "C:/xampp/htdocs/chamadoReal/src/models/Aluno.php";
-require_once "C:/xampp/htdocs/chamadoReal/src/models/CadastroAlunos.php";
+require_once "C:/xampp/htdocs/chamadoReal/validador_acesso.php";
 
-$cadastro = new CadastroAlunos();
-$alunos = $cadastro->listarAlunos();
+//chamados
+$chamados = array();
 
-var_dump($alunos);
+//abrir o arquivo.hd
+$arquivo = fopen('../../arquivo.txt', 'r');
 
-if ($alunos !== null) {
+//enquanto houver registros (linhas) a serem recuperados
+while(!feof($arquivo)) { //testa pelo fim de um arquivo
+  //linhas  
+  $registro = fgets($arquivo);
+  $chamados[] = $registro;
+}
+
+//fechar o arquivo aberto
+fclose($arquivo);
+
+// O restante do código permanece o mesmo, mas você pode querer otimizar o código CSS e HTML.
 ?>
+
+<!-- O conteúdo do arquivo consultar_chamado.php permanece o mesmo, mas você pode querer otimizar o código CSS e HTML. -->
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Alunos Cadastrados</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <meta charset="utf-8" />
+    <title>Chamado Real</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <style>
       .card-consultar-chamado {
         padding: 30px 0 0 0;
         width: 100%;
         margin: 0 auto;
       }
-      .card-body {
-        padding: 1.25rem;
-      }
     </style>
   </head>
+
   <body>
+
     <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="#">
         <img src="../../logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        Alunos Cadastrados
+        Chamado Real
       </a>
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -38,23 +50,47 @@ if ($alunos !== null) {
         </li>
       </ul>
     </nav>
+
     <div class="container">    
       <div class="row">
+
         <div class="card-consultar-chamado">
           <div class="card">
             <div class="card-header">
-              Lista de Alunos
+              Consulta de chamado
             </div>
+            
             <div class="card-body">
-              <?php foreach($alunos as $aluno) { ?>
+
+              <?php foreach($chamados as $chamado) { ?>
+              
+                <?php
+
+                  $chamado_dados = explode('#', $chamado);
+
+                  //
+                  if($_SESSION['perfil_id'] == 1 OR $_SESSION['perfil_id'] == 2) {
+                    //só vamos exibir o chamado, se ele foi criado pelo usuário
+                    if($_SESSION['id'] != $chamado_dados[0]) {
+                      continue;
+                    }
+                  }
+
+                  if(count($chamado_dados) < 3) {
+                    continue;
+                  }
+                ?>
                 <div class="card mb-3 bg-light">
                   <div class="card-body">
-                    <h5 class="card-title"><?=$aluno->getNome()?></h5>
-                    <h6 class="card-subtitle mb-2 text-muted"><?=$aluno->getMatricula()?></h6>
-                    <p class="card-text"><?=$aluno->getCurso()?></p>
+                    <h5 class="card-title"><?=$chamado_dados[1]?></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><?=$chamado_dados[2]?></h6>
+                    <p class="card-text"><?=$chamado_dados[3]?></p>
+
                   </div>
                 </div>
+
               <?php } ?>
+
               <div class="row mt-5">
                 <div class="col-6">
                   <a class="btn btn-lg btn-warning btn-block" href="home.php">Voltar</a>
@@ -67,9 +103,3 @@ if ($alunos !== null) {
     </div>
   </body>
 </html>
-<?php
-} else {
-    echo "Não há alunos cadastrados.";
-}
-?>
-

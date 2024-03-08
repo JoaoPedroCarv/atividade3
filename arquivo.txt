@@ -1,1 +1,4 @@
-3#Notebook não liga#Hardware#Bla bla bla1#
+2#joao#Software#1234
+2#vito#Rede#13768
+2#gio#Software#0009
+2#teste#Sei la#14178

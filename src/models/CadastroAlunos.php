@@ -1,14 +1,14 @@
 <?php
 
-class CadastroAlunos {
-    private $dados = [];
+class CadastroAlunos{
+    private $alunos = [];
 
-    public function cadastrarAluno(Aluno $aluno) {
-        $this->dados[] = $aluno;
+    public function cadastrarAluno($aluno){
+        $this->alunos[] = $aluno;
     }
 
-    public function listarAlunos() {
-        return $this->dados;
+    public function listarAlunos(){
+        return $this->alunos;
     }
 }
 
